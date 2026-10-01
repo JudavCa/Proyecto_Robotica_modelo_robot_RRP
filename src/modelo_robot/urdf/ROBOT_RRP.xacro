@@ -1,0 +1,187 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="ROBOT_RRP">
+
+  <material name="silver">
+    <color rgba="0.700 0.700 0.700 1.000"/>
+  </material>
+
+  <link name="base_link">
+    <inertial>
+      <origin xyz="-0.05017562970559864 -2.2518955897589762e-06 0.055877558881103656" rpy="0 0 0"/>
+      <mass value="0.7156748872735266"/>
+      <inertia ixx="0.002174" iyy="0.002132" izz="0.002026" ixy="-3.4761e-08" iyz="5.9243e-08" ixz="0.0003463"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 -1.57079632679"/>
+      <geometry>
+        <mesh filename="package://modelo_robot/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="silver"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 -1.57079632679"/>
+      <geometry>
+        <mesh filename="package://modelo_robot/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="Link1_1">
+    <inertial>
+      <origin xyz="0.024082412399071485 8.067348825688214e-07 0.07855915155215717" rpy="0 0 0"/>
+      <mass value="1.22604349965649"/>
+      <inertia ixx="0.004221" iyy="0.005843" izz="0.002838" ixy="1.1139e-08" iyz="-1.5805e-08" ixz="0.0001219"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.0 0.0 -0.0535" rpy="0 0 -1.57079632679"/>
+      <geometry>
+        <mesh filename="package://modelo_robot/meshes/Link1_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="silver"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.0 0.0 -0.0535" rpy="0 0 -1.57079632679"/>
+      <geometry>
+        <mesh filename="package://modelo_robot/meshes/Link1_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="Link2_1">
+    <inertial>
+      <origin xyz="0.05593671183346427 0.0013140724584443932 0.04972965995684987" rpy="0 0 0"/>
+      <mass value="0.7194099502410848"/>
+      <inertia ixx="0.0009308" iyy="0.002416" izz="0.001752" ixy="-6.57358e-05" iyz="1.459649e-06" ixz="2.0512e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.1 0.0 -0.0795" rpy="0 0 -1.57079632679"/>
+      <geometry>
+        <mesh filename="package://modelo_robot/meshes/Link2_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="silver"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.1 0.0 -0.0795" rpy="0 0 -1.57079632679"/>
+      <geometry>
+        <mesh filename="package://modelo_robot/meshes/Link2_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!--
+    NOTA IMPORTANTE (pendiente de confirmar):
+    Este link tenia mass=0 e inertia=0 en el URDF original.
+    Se dejan valores PROVISIONALES (pieza plastica liviana ~80 g)
+    para que la simulacion sea valida. Reemplazar cuando se defina
+    el material y la funcion real de esta pieza.
+  -->
+  <link name="Prismatico_1">
+    <inertial>
+      <origin xyz="7e-06 9e-06 0.125516" rpy="0 0 0"/>
+      <mass value="0.028744"/>
+      <inertia ixx="0.000294" iyy="0.000294" izz="2.688347e-06" ixy="1.21e-10" iyz="4.7e-11" ixz="7.91e-10"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.0 -0.2 -0.061625" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://modelo_robot/meshes/Prismatico_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="silver"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.0 -0.2 -0.061625" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://modelo_robot/meshes/Prismatico_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="world"/>
+
+  <joint name="world_to_base" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <joint name="joint1_rev" type="revolute">
+    <origin xyz="0.0 0.0 0.0535" rpy="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="Link1_1"/>
+    <axis xyz="0.0 -0.0 1.0"/>
+    <limit upper="1.570796" lower="-1.570796" effort="4.9" velocity="4.19"/>
+  </joint>
+
+  <joint name="joint2_rev" type="revolute">
+    <origin xyz="0.1 0.0 0.026" rpy="0 0 0"/>
+    <parent link="Link1_1"/>
+    <child link="Link2_1"/>
+    <axis xyz="0.0 -0.0 1.0"/>
+    <limit upper="2.216568" lower="-2.216568" effort="4.9" velocity="4.19"/>
+  </joint>
+
+  <joint name="joint3_prism" type="prismatic">
+    <origin xyz="0.1 0.0 -0.017875" rpy="0 0 0"/>
+    <parent link="Link2_1"/>
+    <child link="Prismatico_1"/>
+    <axis xyz="0.0 -0.0 1.0"/>
+    <limit upper="0.0" lower="-0.0616" effort="100" velocity="100"/>
+  </joint>
+
+  <gazebo reference="base_link">
+    <material>Gazebo/Silver</material>
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <selfCollide>true</selfCollide>
+    <gravity>true</gravity>
+  </gazebo>
+  <gazebo reference="Link1_1">
+    <material>Gazebo/Silver</material>
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+  <gazebo reference="Link2_1">
+    <material>Gazebo/Silver</material>
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+  <gazebo reference="Prismatico_1">
+    <material>Gazebo/Silver</material>
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+
+  <ros2_control name="GazeboSystem" type="system">
+    <hardware>
+      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+    </hardware>
+    <joint name="joint1_rev">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+    <joint name="joint2_rev">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+    <joint name="joint3_prism">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+  </ros2_control>
+
+  <gazebo>
+    <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+      <parameters>$(find modelo_robot)/config/controllers.yaml</parameters>
+    </plugin>
+  </gazebo>
+
+</robot>

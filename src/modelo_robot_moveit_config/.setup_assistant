@@ -1,0 +1,10 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: modelo_robot
+    relative_path: urdf/ROBOT_RRP.xacro
+  srdf:
+    relative_path: config/ROBOT_RRP.srdf
+  package_settings:
+    author_name: JudavCa
+    author_email: juan.guerra76@eia.edu.co
+    generated_timestamp: 1790579243
